@@ -1,0 +1,68 @@
+TODO：
+1、移动要不要换成点击形式的
+2、移动时人物的物理碰撞Box的rotation（朝向）锁定
+3、特殊地表使用sensor，更改Friction等。
+4、操作模式要不要试试做成有点类似OSU的形式，比如推东西就是点——划实现。
+5、InputHelper
+6、暂时不需要考虑不同的Category之间不发生碰撞的情况
+
+
+为了防止想太多，是假2.5D游戏
+所以不会有爬梯子！不会有跳！不需要重力！等等！
+只需要最普通的碰撞！
+
+管理：
+会Update的：
+GameLogic：MapManage.Update，RoleManage.Update，TimeEventManage.Update
+MapManage：Instance，当前地图Update，允许赋值取值
+RoleManage：Instance，当前地图所有角色，允许赋值取值
+TimeEventManage：Instance，当前所有时间事件/计时器
+
+不会Update的：
+mapDataManage：读取地图数据，缓存，读取
+roleDataManage：角色数据，缓存，读取
+textDataManage：文本数据，缓存，读取
+
+
+数据：
+1、读地图
+所有地图：ID、NAME、Type地图类型、scaleThreshold缩放参数、smallmap小地图名、bgm bgm名、minX、maxX、minY、maxY，MoodDec情绪减少基础值、initposx、initposy人物出现在该地图上的初始位置（非传送）、width、height
+
+单个地图碰撞数据：type类型、pointList多边形的点、normal单向通行方向、lowerVec、upperVec AABB框的左下右上坐标、handleName这个collider的名、filterType过滤类型、isActive默认是否激活
+（一个body绑定多个fixture可能需要考虑在point里用不同的分割。）
+可能还需要一个是dynamic还是static的type类
+地图就全由各个collider来构成。（应该是不需要画格子）
+Collider编辑器就靠 是否要新建一个Body节点、Body类型、Shape类型、编辑Point/编辑左上右下角/圆心半径等。
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // 单向阻碍方向（不可向这个方向移动）
+    protected bool shouldCheckNormal = false;
+    public bool m_shouldCheckNormal { get { return shouldCheckNormal; } }
+    protected Vector2 faceNormal = new Vector2();
+    public Vector2 m_faceNormal
+    {
+        get { return faceNormal; }
+        set
+        {
+            shouldCheckNormal = (null != value) && value.LengthSquared() > 0.001f;
+            if (shouldCheckNormal)
+            {
+                faceNormal = value;
+            }
+            else
+            {
+                faceNormal = new Vector2(0, 0);
+            }
+        }
+    }

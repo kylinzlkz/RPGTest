@@ -1,0 +1,4 @@
+﻿ID,姓名,Prefab名,性别,最大血量,平A攻击力,宽,高,速度X,速度Y
+ID,NAME,PREFABNAME,SEX,MAXHP,ATTACK,WIDTH,HEIGHT,VELX,VELY
+1001,测试怪1,Mon/Mon1,0,100,15,0.5,0.5,2,2
+1002,测试怪2,Mon/Mon2,1,50,15,1,1,1,1
